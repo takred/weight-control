@@ -11,12 +11,12 @@ pipeline {
         }
         stage('Stop docker') {
             steps {
-                sh 'docker-compose down'
+                sh 'docker-compose --project-name=weight-control-app down'
             }
         }
         stage('Start docker') {
             steps {
-                sh 'docker-compose up -d --build'
+                sh 'docker-compose up --project-name=weight-control-app -d --build'
             }
         }
     }

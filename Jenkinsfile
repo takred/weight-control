@@ -16,7 +16,7 @@ pipeline {
         }
         stage('Start docker') {
             steps {
-                sh 'docker-compose up --project-name=weight-control-app -d --build'
+                sh 'docker-compose  --project-name=weight-control-app up -d --build'
             }
         }
     }

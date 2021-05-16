@@ -18,7 +18,7 @@ pipeline {
                     then
                         pkill -F application.pid
                     fi
-                    nohup java -jar -Dserver.port=8083 weight-control-0.0.1-SNAPSHOT.jar \\&
+                    nohup java -jar -Dserver.port=8083 weight-control-0.0.1-SNAPSHOT.jar >> server.log 2>&1&
                 '''
             }
         }

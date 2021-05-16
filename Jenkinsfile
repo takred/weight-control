@@ -9,17 +9,14 @@ pipeline {
                 sh './mvnw -B -DskipTests clean package'
             }
         }
-        stage('Deploy'){
+        stage('Stop docker') {
             steps {
-                sh '''
-                    cp target/weight-control-0.0.1-SNAPSHOT.jar /home/riptor/projects/jenkins-install/deploy
-                    cd /home/riptor/projects/jenkins-install/deploy
-                    if test -f application.pid
-                    then
-                        pkill -F application.pid
-                    fi
-                    JENKINS_NODE_COOKIE=dontKillMe nohup java -jar -Dserver.port=8083 weight-control-0.0.1-SNAPSHOT.jar >> server.log 2>&1&
-                '''
+                sh 'docker-compose down'
+            }
+        }
+        stage('Start docker') {
+            steps {
+                sh 'docker-compose up -d --build'
             }
         }
     }

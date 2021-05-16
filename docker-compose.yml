@@ -8,6 +8,7 @@ services:
       context: .
     ports:
       - "8084:8080"
+      - "8081:8081"
     links:
       - postgres-db
   postgres-db:
@@ -15,8 +16,8 @@ services:
     environment:
       - "POSTGRES_PASSWORD=123"
       - "POSTGRES_DB=weight_control"
+      - "PGDATA=/var/lib/postgresql/data/pgdata"
     ports:
       - "5432:5432"
-#      - PGDATA: /var/lib/postgresql/data/pgdata
-#    volumes:
-#    - ./pgdata:/var/lib/postgresql/data
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data

@@ -15,7 +15,7 @@ public class WeightControlApplication {
 //		SpringApplication.run(WeightControlApplication.class, args);
 		SpringApplication springApplication = new SpringApplication(WeightControlApplication.class);
 		springApplication.addListeners(new ApplicationPidFileWriter());
-		springApplication.run();
+		springApplication.run(args);
 	}
 
 }

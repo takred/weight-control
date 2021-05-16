@@ -29,3 +29,4 @@ services:
       - weight-control-network
 networks:
   weight-control-network:
+    name: weight-control-network

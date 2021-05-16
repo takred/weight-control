@@ -3,6 +3,7 @@ version: '3'
 services:
   weight-control:
     container_name: test-pg
+    image: weight-control-web
     build:
       dockerfile: Dockerfile
       context: .
@@ -11,7 +12,10 @@ services:
       - "8081:8081"
     links:
       - postgres-db
+    networks:
+      - weight-control-network
   postgres-db:
+    container_name: test-pg-db
     image: postgres
     environment:
       - "POSTGRES_PASSWORD=123"
@@ -21,3 +25,7 @@ services:
       - "5432:5432"
     volumes:
       - /home/riptor/projects/weight-control/pgdata:/var/lib/postgresql/data
+    networks:
+      - weight-control-network
+networks:
+  weight-control-network:

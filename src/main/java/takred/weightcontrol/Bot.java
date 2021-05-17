@@ -119,30 +119,29 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (getWeightList.getWeightList(this, message)) {
             return;
-        } else if (getChartByCommand.getChartByCommand(this, message)) {
-            return;
-        } else if (getButtons.getButtons(this, message)) {
-            return;
-        } else {
-            LocalDateTime dateTime = LocalDateTime.now();
-            LocalTime midday = LocalTime.of(12, 00);
-
-            List<WeightDto> weights = weightService.getMyWeight(message.getFrom().getId().toString());
-            if (weights.isEmpty()) {
-                addWeight.addWeight(this, message);
-                return;
-            }
-            WeightDto obj = weights.get(weights.size() - 1);
-            boolean now = dateTime.toLocalTime().getHour() >= midday.getHour();
-            boolean inRecording = obj.getDate().toLocalTime().getHour() >= midday.getHour();
-            boolean condition = dateTime.toLocalDate().equals(obj.getDate().toLocalDate())
-                    && now == inRecording;
-            if (!condition) {
-                addWeight.addWeight(this, message);
-                return;
-            }
-            redactWeight.redactWeight(this, message, obj);
         }
+        if (getChartByCommand.getChartByCommand(this, message)) {
+            return;
+        }
+        if (getButtons.getButtons(this, message)) {
+            return;
+        }
+        LocalDateTime dateTime = LocalDateTime.now();
+        LocalTime midday = LocalTime.of(12, 00);
+
+        List<WeightDto> weights = weightService.getMyWeight(message.getFrom().getId().toString());
+        if (addWeight.addWeight(this, message, weights)) {
+            return;
+        }
+        WeightDto obj = weights.get(weights.size() - 1);
+        boolean now = dateTime.toLocalTime().getHour() >= midday.getHour();
+        boolean inRecording = obj.getDate().toLocalTime().getHour() >= midday.getHour();
+        boolean condition = dateTime.toLocalDate().equals(obj.getDate().toLocalDate())
+                && now == inRecording;
+        if (addWeight.addWeight(this, message, condition)) {
+            return;
+        }
+        redactWeight.redactWeight(this, message, obj);
     }
 
     @Override

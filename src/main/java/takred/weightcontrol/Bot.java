@@ -114,37 +114,39 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-        if (message != null) {
-            if (message.getText().equals("/gw")) {
-                getWeightList.getWeightList(this, message);
-            } else if (message.getText().equals("/gwc")) {
-                getChartByCommand.getChartByCommand(this, message);
-            } else if (message.getText().equals("b")) {
-                getButtons.getButtons(this,message);
-            } else {
-                LocalDateTime dateTime = LocalDateTime.now();
-                LocalTime midday = LocalTime.of(12, 00);
-
-                List<WeightDto> weights = weightService.getMyWeight(message.getFrom().getId().toString());
-                if (!weights.isEmpty()) {
-                    WeightDto obj = weights.get(weights.size() - 1);
-                    boolean now = Integer.valueOf(dateTime.toLocalTime().getHour()) >= Integer.valueOf(midday.getHour());
-                    boolean inRecording = Integer.valueOf(obj.getDate().toLocalTime().getHour()) >= Integer.valueOf(midday.getHour());
-                    if (dateTime.toLocalDate().equals(obj.getDate().toLocalDate())
-                            && now == inRecording) {
-                        System.out.println("882");
-                        System.out.println(obj.getId());
-                        redactWeight.redactWeight(this,message, obj);
-                    } else {
-                        addWeight.addWeight(this, message);
-                    }
-                } else {
-                    addWeight.addWeight(this, message);
+        if (message == null) {
+            if (update.hasCallbackQuery()) {
+                if (update.getCallbackQuery().getData().equals("/gwc")) {
+                    getChartByButton.getChart(this, update);
                 }
             }
-        } else if (update.hasCallbackQuery()) {
-            if (update.getCallbackQuery().getData().equals("/gwc")) {
-                getChartByButton.getChart(this, update);
+            return;
+        }
+        if (message.getText().equals("/gw")) {
+            getWeightList.getWeightList(this, message);
+        } else if (message.getText().equals("/gwc")) {
+            getChartByCommand.getChartByCommand(this, message);
+        } else if (message.getText().equals("b")) {
+            getButtons.getButtons(this, message);
+        } else {
+            LocalDateTime dateTime = LocalDateTime.now();
+            LocalTime midday = LocalTime.of(12, 00);
+
+            List<WeightDto> weights = weightService.getMyWeight(message.getFrom().getId().toString());
+            if (weights.isEmpty()) {
+                addWeight.addWeight(this, message);
+                return;
+            }
+            WeightDto obj = weights.get(weights.size() - 1);
+            boolean now = Integer.valueOf(dateTime.toLocalTime().getHour()) >= Integer.valueOf(midday.getHour());
+            boolean inRecording = Integer.valueOf(obj.getDate().toLocalTime().getHour()) >= Integer.valueOf(midday.getHour());
+            if (dateTime.toLocalDate().equals(obj.getDate().toLocalDate())
+                    && now == inRecording) {
+                System.out.println("882");
+                System.out.println(obj.getId());
+                redactWeight.redactWeight(this, message, obj);
+            } else {
+                addWeight.addWeight(this, message);
             }
         }
     }

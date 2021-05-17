@@ -1,7 +1,5 @@
 package takred.weightcontrol.dto;
 
-import java.util.UUID;
-
 public class UserNameAndWeightDto {
     private final String userName;
     private final Double weight;

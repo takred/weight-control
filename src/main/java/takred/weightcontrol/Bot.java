@@ -114,12 +114,7 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-        if (message == null) {
-            if (update.hasCallbackQuery()) {
-                if (update.getCallbackQuery().getData().equals("/gwc")) {
-                    getChartByButton.getChart(this, update);
-                }
-            }
+        if (getChartByButton.getChart(this, update)) {
             return;
         }
         if (message.getText().equals("/gw")) {
@@ -146,8 +141,6 @@ public class Bot extends TelegramLongPollingBot {
                 addWeight.addWeight(this, message);
                 return;
             }
-            System.out.println("882");
-            System.out.println(obj.getId());
             redactWeight.redactWeight(this, message, obj);
         }
     }

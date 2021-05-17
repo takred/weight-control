@@ -138,16 +138,17 @@ public class Bot extends TelegramLongPollingBot {
                 return;
             }
             WeightDto obj = weights.get(weights.size() - 1);
-            boolean now = Integer.valueOf(dateTime.toLocalTime().getHour()) >= Integer.valueOf(midday.getHour());
-            boolean inRecording = Integer.valueOf(obj.getDate().toLocalTime().getHour()) >= Integer.valueOf(midday.getHour());
-            if (dateTime.toLocalDate().equals(obj.getDate().toLocalDate())
-                    && now == inRecording) {
-                System.out.println("882");
-                System.out.println(obj.getId());
-                redactWeight.redactWeight(this, message, obj);
-            } else {
+            boolean now = dateTime.toLocalTime().getHour() >= midday.getHour();
+            boolean inRecording = obj.getDate().toLocalTime().getHour() >= midday.getHour();
+            boolean condition = dateTime.toLocalDate().equals(obj.getDate().toLocalDate())
+                    && now == inRecording;
+            if (!condition) {
                 addWeight.addWeight(this, message);
+                return;
             }
+            System.out.println("882");
+            System.out.println(obj.getId());
+            redactWeight.redactWeight(this, message, obj);
         }
     }
 

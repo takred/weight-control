@@ -15,13 +15,17 @@ import java.io.IOException;
 @Service
 public class GetChartByCommand {
 
-    public void getChartByCommand(Bot bot, Message message) throws IOException {
-        ChartCreator chartCreator = new ChartCreator();
-        CategoryDataset categoryDataset = chartCreator.createDataset(bot.weightService.getMyWeight(message.getFrom().getId().toString()));
-        JFreeChart chart = chartCreator.createChart(categoryDataset);
-        BufferedImage bufferedImage = chart.createBufferedImage(1000, 1000);
-        File outputfile = new File("chart.png");
-        ImageIO.write(bufferedImage, "png", outputfile);
-        bot.sendPhoto(message, outputfile);
+    public boolean getChartByCommand(Bot bot, Message message) throws IOException {
+        if (message.getText().equals("/gwc")) {
+            ChartCreator chartCreator = new ChartCreator();
+            CategoryDataset categoryDataset = chartCreator.createDataset(bot.weightService.getMyWeight(message.getFrom().getId().toString()));
+            JFreeChart chart = chartCreator.createChart(categoryDataset);
+            BufferedImage bufferedImage = chart.createBufferedImage(1000, 1000);
+            File outputfile = new File("chart.png");
+            ImageIO.write(bufferedImage, "png", outputfile);
+            bot.sendPhoto(message, outputfile);
+            return true;
+        }
+        return false;
     }
 }

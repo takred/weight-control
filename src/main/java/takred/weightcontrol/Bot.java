@@ -119,8 +119,8 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (getWeightList.getWeightList(this, message)) {
             return;
-        } else if (message.getText().equals("/gwc")) {
-            getChartByCommand.getChartByCommand(this, message);
+        } else if (getChartByCommand.getChartByCommand(this, message)) {
+            return;
         } else if (message.getText().equals("b")) {
             getButtons.getButtons(this, message);
         } else {

@@ -18,6 +18,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import takred.weightcontrol.bot_commands.AddWeight;
 import takred.weightcontrol.bot_commands.GetButtons;
 import takred.weightcontrol.bot_commands.GetChartByButton;
+import takred.weightcontrol.bot_commands.GetChartByCommand;
 import takred.weightcontrol.dto.WeightDto;
 import takred.weightcontrol.service.WeightService;
 
@@ -36,12 +37,14 @@ public class Bot extends TelegramLongPollingBot {
     private final AddWeight addWeight;
     private final GetButtons getButtons;
     private final GetChartByButton getChartByButton;
+    private final GetChartByCommand getChartByCommand;
 
-    public Bot(WeightService weightService, AddWeight addWeight, GetButtons getButtons, GetChartByButton getChartByButton) {
+    public Bot(WeightService weightService, AddWeight addWeight, GetButtons getButtons, GetChartByButton getChartByButton, GetChartByCommand getChartByCommand) {
         this.weightService = weightService;
         this.addWeight = addWeight;
         this.getButtons = getButtons;
         this.getChartByButton = getChartByButton;
+        this.getChartByCommand = getChartByCommand;
     }
 
     @PostConstruct
@@ -135,13 +138,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage(message, weightService.getMyWeight(message.getFrom().getId().toString()).toString());
             } else if (message.getText().equals("/gwc")) {
                 System.out.println("444");
-                ChartCreator chartCreator = new ChartCreator();
-                CategoryDataset categoryDataset = chartCreator.createDataset(weightService.getMyWeight(message.getFrom().getId().toString()));
-                JFreeChart chart = chartCreator.createChart(categoryDataset);
-                BufferedImage bufferedImage = chart.createBufferedImage(1000, 1000);
-                File outputfile = new File("chart.png");
-                ImageIO.write(bufferedImage, "png", outputfile);
-                sendPhoto(message, outputfile);
+                getChartByCommand.getChartByCommand(this, message);
             } else if (message.getText().equals("/gwp")) {
                 System.out.println("555");
                 sendPhoto(message);

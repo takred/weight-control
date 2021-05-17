@@ -32,14 +32,16 @@ public class Bot extends TelegramLongPollingBot {
     private final GetChartByButton getChartByButton;
     private final GetChartByCommand getChartByCommand;
     private final GetWeightList getWeightList;
+    private final RedactWeight redactWeight;
 
-    public Bot(WeightService weightService, AddWeight addWeight, GetButtons getButtons, GetChartByButton getChartByButton, GetChartByCommand getChartByCommand, GetWeightList getWeightList) {
+    public Bot(WeightService weightService, AddWeight addWeight, GetButtons getButtons, GetChartByButton getChartByButton, GetChartByCommand getChartByCommand, GetWeightList getWeightList, RedactWeight redactWeight) {
         this.weightService = weightService;
         this.addWeight = addWeight;
         this.getButtons = getButtons;
         this.getChartByButton = getChartByButton;
         this.getChartByCommand = getChartByCommand;
         this.getWeightList = getWeightList;
+        this.redactWeight = redactWeight;
     }
 
     @PostConstruct
@@ -156,8 +158,7 @@ public class Bot extends TelegramLongPollingBot {
                             && now == inRecording) {
                         System.out.println("882");
                         System.out.println(obj.getId());
-                        weightService.setWeight(obj, Double.parseDouble(message.getText()));
-                        sendMessage(message, "Показатель веса отредактирован.");
+                        redactWeight.redactWeight(this,message, obj);
                     } else {
                         System.out.println("883");
                         addWeight.addWeight(this, message);

@@ -68,18 +68,6 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public void sendPhoto(Message message) {
-        SendPhoto sendPhoto = new SendPhoto();
-        sendPhoto.setPhoto(new File("thumb-1920-1123013.jpg"));
-        sendPhoto.setChatId(message.getChatId().toString());
-        sendPhoto.setReplyToMessageId(message.getMessageId());
-        try {
-            execute(sendPhoto);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void sendPhoto(Message message, File photo) {
         SendPhoto sendPhoto = new SendPhoto();
         sendPhoto.setPhoto(photo);
@@ -122,36 +110,24 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
-        System.out.println("111");
         Message message = update.getMessage();
         if (message != null) {
-            System.out.println("222");
             if (message.getText().equals("/gw")) {
-                System.out.println("333");
                 getWeightList.getWeightList(this, message);
             } else if (message.getText().equals("/gwc")) {
-                System.out.println("444");
                 getChartByCommand.getChartByCommand(this, message);
-            } else if (message.getText().equals("/gwp")) {
-                System.out.println("555");
-                sendPhoto(message);
             } else if (message.getText().equals("b")) {
-                System.out.println("666");
                 getButtons.getButtons(this,message);
             } else {
-                System.out.println("888");
                 LocalDateTime dateTime = LocalDateTime.now();
                 LocalTime midday = LocalTime.of(12, 00);
 
                 List<WeightDto> weights = weightService.getMyWeight(message.getFrom().getId().toString());
                 if (!weights.isEmpty()) {
-                    System.out.println("881");
                     WeightDto obj = weights.get(weights.size() - 1);
-                    System.out.println(obj);
                     boolean now = Integer.valueOf(dateTime.toLocalTime().getHour()) >= Integer.valueOf(midday.getHour());
                     boolean inRecording = Integer.valueOf(obj.getDate().toLocalTime().getHour()) >= Integer.valueOf(midday.getHour());
                     if (dateTime.toLocalDate().equals(obj.getDate().toLocalDate())
@@ -160,18 +136,14 @@ public class Bot extends TelegramLongPollingBot {
                         System.out.println(obj.getId());
                         redactWeight.redactWeight(this,message, obj);
                     } else {
-                        System.out.println("883");
                         addWeight.addWeight(this, message);
                     }
                 } else {
-                    System.out.println("883");
                     addWeight.addWeight(this, message);
                 }
             }
-            System.out.println("888");
         } else if (update.hasCallbackQuery()) {
             if (update.getCallbackQuery().getData().equals("/gwc")) {
-                System.out.println("777");
                 getChartByButton.getChart(this, update);
             }
         }

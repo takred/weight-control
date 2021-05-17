@@ -7,7 +7,11 @@ import takred.weightcontrol.Bot;
 @Service
 public class GetWeightList {
 
-    public void getWeightList(Bot bot, Message message) {
-        bot.sendMessage(message, bot.weightService.getMyWeight(message.getFrom().getId().toString()).toString());
+    public boolean getWeightList(Bot bot, Message message) {
+        if (message.getText().equals("/gw")) {
+            bot.sendMessage(message, bot.weightService.getMyWeight(message.getFrom().getId().toString()).toString());
+            return true;
+        }
+        return false;
     }
 }

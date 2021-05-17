@@ -1,8 +1,6 @@
 package takred.weightcontrol;
 
 import lombok.SneakyThrows;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.CategoryDataset;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -15,16 +13,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
-import takred.weightcontrol.bot_commands.AddWeight;
-import takred.weightcontrol.bot_commands.GetButtons;
-import takred.weightcontrol.bot_commands.GetChartByButton;
-import takred.weightcontrol.bot_commands.GetChartByCommand;
+import takred.weightcontrol.bot_commands.*;
 import takred.weightcontrol.dto.WeightDto;
 import takred.weightcontrol.service.WeightService;
 
 import javax.annotation.PostConstruct;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -38,13 +31,15 @@ public class Bot extends TelegramLongPollingBot {
     private final GetButtons getButtons;
     private final GetChartByButton getChartByButton;
     private final GetChartByCommand getChartByCommand;
+    private final GetWeightList getWeightList;
 
-    public Bot(WeightService weightService, AddWeight addWeight, GetButtons getButtons, GetChartByButton getChartByButton, GetChartByCommand getChartByCommand) {
+    public Bot(WeightService weightService, AddWeight addWeight, GetButtons getButtons, GetChartByButton getChartByButton, GetChartByCommand getChartByCommand, GetWeightList getWeightList) {
         this.weightService = weightService;
         this.addWeight = addWeight;
         this.getButtons = getButtons;
         this.getChartByButton = getChartByButton;
         this.getChartByCommand = getChartByCommand;
+        this.getWeightList = getWeightList;
     }
 
     @PostConstruct
@@ -135,7 +130,7 @@ public class Bot extends TelegramLongPollingBot {
             System.out.println("222");
             if (message.getText().equals("/gw")) {
                 System.out.println("333");
-                sendMessage(message, weightService.getMyWeight(message.getFrom().getId().toString()).toString());
+                getWeightList.getWeightList(this, message);
             } else if (message.getText().equals("/gwc")) {
                 System.out.println("444");
                 getChartByCommand.getChartByCommand(this, message);

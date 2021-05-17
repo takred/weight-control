@@ -17,6 +17,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import takred.weightcontrol.bot_commands.AddWeight;
 import takred.weightcontrol.bot_commands.GetButtons;
+import takred.weightcontrol.bot_commands.GetChartByButton;
 import takred.weightcontrol.dto.WeightDto;
 import takred.weightcontrol.service.WeightService;
 
@@ -34,11 +35,13 @@ public class Bot extends TelegramLongPollingBot {
     public final WeightService weightService;
     private final AddWeight addWeight;
     private final GetButtons getButtons;
+    private final GetChartByButton getChartByButton;
 
-    public Bot(WeightService weightService, AddWeight addWeight, GetButtons getButtons) {
+    public Bot(WeightService weightService, AddWeight addWeight, GetButtons getButtons, GetChartByButton getChartByButton) {
         this.weightService = weightService;
         this.addWeight = addWeight;
         this.getButtons = getButtons;
+        this.getChartByButton = getChartByButton;
     }
 
     @PostConstruct
@@ -176,13 +179,7 @@ public class Bot extends TelegramLongPollingBot {
         } else if (update.hasCallbackQuery()) {
             if (update.getCallbackQuery().getData().equals("/gwc")) {
                 System.out.println("777");
-                ChartCreator chartCreator = new ChartCreator();
-                CategoryDataset categoryDataset = chartCreator.createDataset(weightService.getMyWeight(update.getCallbackQuery().getFrom().getId().toString()));
-                JFreeChart chart = chartCreator.createChart(categoryDataset);
-                BufferedImage bufferedImage = chart.createBufferedImage(1000, 1000);
-                File outputfile = new File("chart.png");
-                ImageIO.write(bufferedImage, "png", outputfile);
-                sendPhoto(update.getCallbackQuery(), outputfile);
+                getChartByButton.getChart(this, update);
             }
         }
     }

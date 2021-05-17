@@ -13,9 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import takred.weightcontrol.bot_commands.AddWeight;
 import takred.weightcontrol.dto.UserNameAndWeightDto;
 import takred.weightcontrol.dto.WeightDto;
 import takred.weightcontrol.service.WeightService;
@@ -31,10 +31,12 @@ import java.util.List;
 
 @Service
 public class Bot extends TelegramLongPollingBot {
-    private final WeightService weightService;
+    public final WeightService weightService;
+    private final AddWeight addWeight;
 
-    public Bot(WeightService weightService) {
+    public Bot(WeightService weightService, AddWeight addWeight) {
         this.weightService = weightService;
+        this.addWeight = addWeight;
     }
 
     @PostConstruct
@@ -161,13 +163,11 @@ public class Bot extends TelegramLongPollingBot {
                         sendMessage(message, "Показатель веса отредактирован.");
                     } else {
                         System.out.println("883");
-                        weightService.addWeight(new UserNameAndWeightDto(message.getFrom().getId().toString(), Double.parseDouble(message.getText())));
-                        sendMessage(message, "Показатель веса добавлен в список.");
+                        addWeight.addWeight(this, message);
                     }
                 } else {
                     System.out.println("883");
-                    weightService.addWeight(new UserNameAndWeightDto(message.getFrom().getId().toString(), Double.parseDouble(message.getText())));
-                    sendMessage(message, "Показатель веса добавлен в список.");
+                    addWeight.addWeight(this, message);
                 }
             }
             System.out.println("888");

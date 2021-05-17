@@ -7,7 +7,11 @@ import takred.weightcontrol.Bot;
 @Service
 public class GetButtons {
 
-    public void getButtons(Bot bot, Message message) {
-        bot.sendInlineKeyboardButton(message);
+    public boolean getButtons(Bot bot, Message message) {
+        if (message.getText().equals("b")) {
+            bot.sendInlineKeyboardButton(message);
+            return true;
+        }
+        return false;
     }
 }

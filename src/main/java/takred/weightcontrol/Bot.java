@@ -121,8 +121,8 @@ public class Bot extends TelegramLongPollingBot {
             return;
         } else if (getChartByCommand.getChartByCommand(this, message)) {
             return;
-        } else if (message.getText().equals("b")) {
-            getButtons.getButtons(this, message);
+        } else if (getButtons.getButtons(this, message)) {
+            return;
         } else {
             LocalDateTime dateTime = LocalDateTime.now();
             LocalTime midday = LocalTime.of(12, 00);

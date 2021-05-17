@@ -16,12 +16,15 @@ public class Weight {
     @Id
     private UUID id;
 
+    public Weight() {}
+
     public Weight(String userName, Double weight, LocalDateTime measurementDate) {
         this.userName = userName;
         this.weight = weight;
         this.measurementDate = measurementDate;
         this.id = UUID.randomUUID();
     }
+
     public Weight(String userName, Double weight, LocalDateTime measurementDate, UUID id) {
         this.userName = userName;
         this.weight = weight;

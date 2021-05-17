@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import takred.weightcontrol.bot_commands.AddWeight;
-import takred.weightcontrol.dto.UserNameAndWeightDto;
+import takred.weightcontrol.bot_commands.GetButtons;
 import takred.weightcontrol.dto.WeightDto;
 import takred.weightcontrol.service.WeightService;
 
@@ -33,10 +33,12 @@ import java.util.List;
 public class Bot extends TelegramLongPollingBot {
     public final WeightService weightService;
     private final AddWeight addWeight;
+    private final GetButtons getButtons;
 
-    public Bot(WeightService weightService, AddWeight addWeight) {
+    public Bot(WeightService weightService, AddWeight addWeight, GetButtons getButtons) {
         this.weightService = weightService;
         this.addWeight = addWeight;
+        this.getButtons = getButtons;
     }
 
     @PostConstruct
@@ -142,7 +144,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendPhoto(message);
             } else if (message.getText().equals("b")) {
                 System.out.println("666");
-                sendInlineKeyboardButton(message);
+                getButtons.getButtons(this,message);
             } else {
                 System.out.println("888");
                 LocalDateTime dateTime = LocalDateTime.now();

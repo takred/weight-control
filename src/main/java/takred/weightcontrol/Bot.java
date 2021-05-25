@@ -1,6 +1,7 @@
 package takred.weightcontrol;
 
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -33,6 +34,8 @@ public class Bot extends TelegramLongPollingBot {
     private final GetChartByCommand getChartByCommand;
     private final GetWeightList getWeightList;
     private final RedactWeight redactWeight;
+    @Value("${bot-token}")
+    private String botToken;
 
     public Bot(WeightService weightService, AddWeight addWeight, GetButtons getButtons, GetChartByButton getChartByButton, GetChartByCommand getChartByCommand, GetWeightList getWeightList, RedactWeight redactWeight) {
         this.weightService = weightService;
@@ -151,6 +154,7 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "1783806176:AAHvQSrI2Tp0XK-FqfNZNyTYlcYpInFYpbk";
+        System.out.println(botToken);
+        return botToken;
     }
 }

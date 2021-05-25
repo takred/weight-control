@@ -1,0 +1,31 @@
+#version: "3.9"  # optional since v1.27.0
+version: '3'
+services:
+  weight-control:
+    container_name: test-pg
+    image: weight-control-web
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "8084:8080"
+      - "8081:8081"
+    links:
+      - postgres-db
+    networks:
+      - weight-control-network
+  postgres-db:
+    container_name: test-pg-db
+    image: postgres
+    environment:
+      - "POSTGRES_PASSWORD=123"
+      - "POSTGRES_DB=weight_control"
+      - "PGDATA=/var/lib/postgresql/data/pgdata"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ${PG_DATA}:/var/lib/postgresql/data
+    networks:
+      - weight-control-network
+networks:
+  weight-control-network:

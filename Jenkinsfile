@@ -3,6 +3,9 @@ pipeline {
     options {
         skipStagesAfterUnstable()
     }
+    environment {
+        BOT_TOKEN = credentials('bot-token')
+    }
     stages {
         stage('Build') {
             steps {
@@ -16,7 +19,7 @@ pipeline {
         }
         stage('Start docker') {
             steps {
-                sh 'docker-compose  --project-name=weight-control-app up -d --build'
+                sh "docker-compose -e BOT_TOKEN=$BOT_TOKEN --project-name=weight-control-app up -d --build"
             }
         }
     }

@@ -4,6 +4,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.CategoryDataset;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import takred.weightcontrol.Bot;
 import takred.weightcontrol.ChartCreator;
 
@@ -15,15 +16,15 @@ import java.io.IOException;
 @Service
 public class GetChartByCommand {
 
-    public boolean getChartByCommand(Bot bot, Message message) throws IOException {
-        if (message.getText().equals("/gwc")) {
+    public boolean process(Bot bot, Update update) throws IOException {
+        if (update.getMessage().getText().equals("/gwc")) {
             ChartCreator chartCreator = new ChartCreator();
-            CategoryDataset categoryDataset = chartCreator.createDataset(bot.weightService.getMyWeight(message.getFrom().getId().toString()));
+            CategoryDataset categoryDataset = chartCreator.createDataset(bot.weightService.getMyWeight(update.getMessage().getFrom().getId().toString()));
             JFreeChart chart = chartCreator.createChart(categoryDataset);
             BufferedImage bufferedImage = chart.createBufferedImage(1000, 1000);
             File outputfile = new File("chart.png");
             ImageIO.write(bufferedImage, "png", outputfile);
-            bot.sendPhoto(message, outputfile);
+            bot.sendPhoto(update.getMessage(), outputfile);
             return true;
         }
         return false;

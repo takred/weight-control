@@ -15,7 +15,7 @@ import java.io.IOException;
 @Service
 public class GetChartByButton {
 
-    public boolean getChart(Bot bot, Update update) throws IOException {
+    public boolean process(Bot bot, Update update) throws IOException {
         if (update.getMessage() == null) {
             if (update.hasCallbackQuery()) {
                 if (update.getCallbackQuery().getData().equals("/gwc")) {

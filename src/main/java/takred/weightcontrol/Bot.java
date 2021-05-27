@@ -117,16 +117,16 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-        if (getChartByButton.getChart(this, update)) {
+        if (getChartByButton.process(this, update)) {
             return;
         }
-        if (getWeightList.getWeightList(this, message)) {
+        if (getWeightList.process(this, update)) {
             return;
         }
-        if (getChartByCommand.getChartByCommand(this, message)) {
+        if (getChartByCommand.process(this, update)) {
             return;
         }
-        if (getButtons.getButtons(this, message)) {
+        if (getButtons.process(this, update)) {
             return;
         }
         LocalDateTime dateTime = LocalDateTime.now();
@@ -149,7 +149,7 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "weight_controlBot";
+        return "test_weight_controlBot";
     }
 
     @Override

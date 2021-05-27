@@ -12,7 +12,6 @@ public class WeightControlApplication {
 
 	public static void main(String[] args) {
 		ApiContextInitializer.init();
-//		SpringApplication.run(WeightControlApplication.class, args);
 		SpringApplication springApplication = new SpringApplication(WeightControlApplication.class);
 		springApplication.addListeners(new ApplicationPidFileWriter());
 		springApplication.run(args);

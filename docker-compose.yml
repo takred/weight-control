@@ -7,6 +7,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
+    environment:
+      - "BOT_TOKEN=${BOT_TOKEN}"
     ports:
       - "8084:8080"
       - "8081:8081"

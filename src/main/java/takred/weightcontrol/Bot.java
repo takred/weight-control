@@ -15,38 +15,37 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import takred.weightcontrol.bot_commands.*;
-import takred.weightcontrol.dto.WeightDto;
 import takred.weightcontrol.service.WeightService;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class Bot extends TelegramLongPollingBot {
     public final WeightService weightService;
-    private final AddWeight addWeight;
+    public final AddWeight addWeight;
+    public final RedactWeight redactWeight;
+    private final SetWeight setWeight;
     private final GetButtons getButtons;
     private final GetChartByButton getChartByButton;
     private final GetChartByCommand getChartByCommand;
     private final GetWeightList getWeightList;
-    private final RedactWeight redactWeight;
     private final String botToken;
 
     public Bot(WeightService weightService,
                AddWeight addWeight,
-               GetButtons getButtons,
+               SetWeight setWeight, GetButtons getButtons,
                GetChartByButton getChartByButton,
                GetChartByCommand getChartByCommand,
                GetWeightList getWeightList,
                RedactWeight redactWeight,
                @Value("${bot-token}") String botToken
-               ) {
+    ) {
         this.weightService = weightService;
         this.addWeight = addWeight;
+        this.setWeight = setWeight;
         this.getButtons = getButtons;
         this.getChartByButton = getChartByButton;
         this.getChartByCommand = getChartByCommand;
@@ -124,7 +123,7 @@ public class Bot extends TelegramLongPollingBot {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
-        Message message = update.getMessage();
+//        Message message = update.getMessage();
         if (getChartByButton.process(this, update)) {
             return;
         }
@@ -137,22 +136,25 @@ public class Bot extends TelegramLongPollingBot {
         if (getButtons.process(this, update)) {
             return;
         }
-        LocalDateTime dateTime = LocalDateTime.now();
-        LocalTime midday = LocalTime.of(12, 00);
-
-        List<WeightDto> weights = weightService.getMyWeight(message.getFrom().getId().toString());
-        if (addWeight.addWeight(this, message, weights)) {
+        if (setWeight.process(this, update)) {
             return;
         }
-        WeightDto obj = weights.get(weights.size() - 1);
-        boolean now = dateTime.toLocalTime().getHour() >= midday.getHour();
-        boolean inRecording = obj.getDate().toLocalTime().getHour() >= midday.getHour();
-        boolean condition = dateTime.toLocalDate().equals(obj.getDate().toLocalDate())
-                && now == inRecording;
-        if (addWeight.addWeight(this, message, condition)) {
-            return;
-        }
-        redactWeight.redactWeight(this, message, obj);
+//        LocalDateTime dateTime = LocalDateTime.now();
+//        LocalTime midday = LocalTime.of(12, 00);
+//
+//        List<WeightDto> weights = weightService.getMyWeight(message.getFrom().getId().toString());
+//        if (addWeight.addWeight(this, message, weights)) {
+//            return;
+//        }
+//        WeightDto obj = weights.get(weights.size() - 1);
+//        boolean now = dateTime.toLocalTime().getHour() >= midday.getHour();
+//        boolean inRecording = obj.getDate().toLocalTime().getHour() >= midday.getHour();
+//        boolean condition = dateTime.toLocalDate().equals(obj.getDate().toLocalDate())
+//                && now == inRecording;
+//        if (addWeight.addWeight(this, message, condition)) {
+//            return;
+//        }
+//        redactWeight.redactWeight(this, message, obj);
     }
 
     @Override

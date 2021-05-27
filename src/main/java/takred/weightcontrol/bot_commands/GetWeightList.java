@@ -1,7 +1,6 @@
 package takred.weightcontrol.bot_commands;
 
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import takred.weightcontrol.Bot;
 

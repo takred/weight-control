@@ -1,5 +1,6 @@
 package takred.weightcontrol.bot_commands;
 
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import takred.weightcontrol.Bot;
 import takred.weightcontrol.dto.WeightDto;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+@Service
 public class SetWeight {
     public boolean process(Bot bot, Update update) {
         LocalDateTime dateTime = LocalDateTime.now();
@@ -27,5 +29,19 @@ public class SetWeight {
         }
         bot.redactWeight.redactWeight(bot, update.getMessage(), obj);
         return true;
+    }
+
+    public int getLowConfines(List<WeightDto> dtos) {
+        int lowConfines = 0;
+        for (int i = 0; i < dtos.size(); i++) {
+            WeightDto weightDto = dtos.get(i);
+            if (weightDto.getWeight() < lowConfines) {
+                lowConfines = weightDto.getWeight().intValue();
+            }
+        }
+        if (lowConfines <= 10) {
+            return 0;
+        }
+        return lowConfines - 10;
     }
 }

@@ -3,13 +3,14 @@ package takred.weightcontrol.bot_commands;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import takred.weightcontrol.Bot;
+import takred.weightcontrol.MessageHandler;
 import takred.weightcontrol.dto.UserNameAndWeightDto;
 import takred.weightcontrol.dto.WeightDto;
 
 import java.util.List;
 
 @Service
-public class AddWeight {
+public class AddWeight{
 
     public boolean addWeight(Bot bot, Message message, List<WeightDto> weights) {
         if (weights.isEmpty()) {

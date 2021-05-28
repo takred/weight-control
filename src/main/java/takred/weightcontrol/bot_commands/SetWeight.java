@@ -3,6 +3,7 @@ package takred.weightcontrol.bot_commands;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import takred.weightcontrol.Bot;
+import takred.weightcontrol.MessageHandler;
 import takred.weightcontrol.dto.WeightDto;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Service
-public class SetWeight {
+public class SetWeight implements MessageHandler {
     public boolean process(Bot bot, Update update) {
         LocalDateTime dateTime = LocalDateTime.now();
         LocalTime midday = LocalTime.of(12, 00);

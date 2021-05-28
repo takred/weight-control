@@ -27,12 +27,13 @@ public class Bot extends TelegramLongPollingBot {
     public final WeightService weightService;
     public final AddWeight addWeight;
     public final RedactWeight redactWeight;
-    private final SetWeight setWeight;
-    private final GetButtons getButtons;
-    private final GetChartByButton getChartByButton;
-    private final GetChartByCommand getChartByCommand;
-    private final GetWeightList getWeightList;
+//    private final SetWeight setWeight;
+//    private final GetButtons getButtons;
+//    private final GetChartByButton getChartByButton;
+//    private final GetChartByCommand getChartByCommand;
+//    private final GetWeightList getWeightList;
     private final String botToken;
+    private final List<MessageHandler> messageHandlers = new ArrayList<>();
 
     public Bot(WeightService weightService,
                AddWeight addWeight,
@@ -43,13 +44,18 @@ public class Bot extends TelegramLongPollingBot {
                RedactWeight redactWeight,
                @Value("${bot-token}") String botToken
     ) {
+        this.messageHandlers.add(setWeight);
+        this.messageHandlers.add(getButtons);
+        this.messageHandlers.add(getChartByButton);
+        this.messageHandlers.add(getChartByCommand);
+        this.messageHandlers.add(getWeightList);
         this.weightService = weightService;
         this.addWeight = addWeight;
-        this.setWeight = setWeight;
-        this.getButtons = getButtons;
-        this.getChartByButton = getChartByButton;
-        this.getChartByCommand = getChartByCommand;
-        this.getWeightList = getWeightList;
+//        this.setWeight = setWeight;
+//        this.getButtons = getButtons;
+//        this.getChartByButton = getChartByButton;
+//        this.getChartByCommand = getChartByCommand;
+//        this.getWeightList = getWeightList;
         this.redactWeight = redactWeight;
         this.botToken = botToken;
     }
@@ -123,21 +129,26 @@ public class Bot extends TelegramLongPollingBot {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
-        if (getChartByButton.process(this, update)) {
-            return;
+        for (int i = 0; i <messageHandlers.size(); i++) {
+            if (messageHandlers.get(i).process(this, update)) {
+                return;
+            }
         }
-        if (getWeightList.process(this, update)) {
-            return;
-        }
-        if (getChartByCommand.process(this, update)) {
-            return;
-        }
-        if (getButtons.process(this, update)) {
-            return;
-        }
-        if (setWeight.process(this, update)) {
-            return;
-        }
+//        if (getChartByButton.process(this, update)) {
+//            return;
+//        }
+//        if (getWeightList.process(this, update)) {
+//            return;
+//        }
+//        if (getChartByCommand.process(this, update)) {
+//            return;
+//        }
+//        if (getButtons.process(this, update)) {
+//            return;
+//        }
+//        if (setWeight.process(this, update)) {
+//            return;
+//        }
     }
 
     @Override

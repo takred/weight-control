@@ -9,9 +9,13 @@ import takred.weightcontrol.MessageHandler;
 public class GetButtons implements MessageHandler {
 
     public boolean process(Bot bot, Update update) {
-        if (update.getMessage().getText().equals("b")) {
-            bot.sendInlineKeyboardButton(update.getMessage());
-            return true;
+        if (!update.hasCallbackQuery()) {
+            if (update.hasMessage()) {
+                if (update.getMessage().getText().equals("b")) {
+                    bot.sendInlineKeyboardButton(update.getMessage());
+                    return true;
+                }
+            }
         }
         return false;
     }

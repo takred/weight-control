@@ -13,23 +13,35 @@ import java.util.List;
 @Service
 public class SetWeight implements MessageHandler {
     public boolean process(Bot bot, Update update) {
-        LocalDateTime dateTime = LocalDateTime.now();
-        LocalTime midday = LocalTime.of(12, 00);
 
-        List<WeightDto> weights = bot.weightService.getMyWeight(update.getMessage().getFrom().getId().toString());
-        if (bot.addWeight.addWeight(bot, update.getMessage(), weights)) {
-            return true;
+        if (!update.hasCallbackQuery()) {
+            if (update.hasMessage()) {
+                try {
+                    Double.parseDouble(update.getMessage().getText());
+                } catch (NumberFormatException e) {
+                    System.out.println("Couldn't turn string into number");
+                    return false;
+                }
+                LocalDateTime dateTime = LocalDateTime.now();
+                LocalTime midday = LocalTime.of(12, 00);
+
+                List<WeightDto> weights = bot.weightService.getMyWeight(update.getMessage().getFrom().getId().toString());
+                if (bot.addWeight.addWeight(bot, update.getMessage(), weights)) {
+                    return true;
+                }
+                WeightDto obj = weights.get(weights.size() - 1);
+                boolean now = dateTime.toLocalTime().getHour() >= midday.getHour();
+                boolean inRecording = obj.getDate().toLocalTime().getHour() >= midday.getHour();
+                boolean condition = dateTime.toLocalDate().equals(obj.getDate().toLocalDate())
+                        && now == inRecording;
+                if (bot.addWeight.addWeight(bot, update.getMessage(), condition)) {
+                    return true;
+                }
+                bot.redactWeight.redactWeight(bot, update.getMessage(), obj);
+                return true;
+            }
         }
-        WeightDto obj = weights.get(weights.size() - 1);
-        boolean now = dateTime.toLocalTime().getHour() >= midday.getHour();
-        boolean inRecording = obj.getDate().toLocalTime().getHour() >= midday.getHour();
-        boolean condition = dateTime.toLocalDate().equals(obj.getDate().toLocalDate())
-                && now == inRecording;
-        if (bot.addWeight.addWeight(bot, update.getMessage(), condition)) {
-            return true;
-        }
-        bot.redactWeight.redactWeight(bot, update.getMessage(), obj);
-        return true;
+        return false;
     }
 
     public int getLowConfines(List<WeightDto> dtos) {

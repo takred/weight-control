@@ -27,11 +27,6 @@ public class Bot extends TelegramLongPollingBot {
     public final WeightService weightService;
     public final AddWeight addWeight;
     public final RedactWeight redactWeight;
-//    private final SetWeight setWeight;
-//    private final GetButtons getButtons;
-//    private final GetChartByButton getChartByButton;
-//    private final GetChartByCommand getChartByCommand;
-//    private final GetWeightList getWeightList;
     private final String botToken;
     private final List<MessageHandler> messageHandlers = new ArrayList<>();
 
@@ -44,18 +39,13 @@ public class Bot extends TelegramLongPollingBot {
                RedactWeight redactWeight,
                @Value("${bot-token}") String botToken
     ) {
-        this.messageHandlers.add(getChartByButton);
-        this.messageHandlers.add(getWeightList);
-        this.messageHandlers.add(getChartByCommand);
-        this.messageHandlers.add(getButtons);
-        this.messageHandlers.add(setWeight);
         this.weightService = weightService;
         this.addWeight = addWeight;
-//        this.setWeight = setWeight;
-//        this.getButtons = getButtons;
-//        this.getChartByButton = getChartByButton;
-//        this.getChartByCommand = getChartByCommand;
-//        this.getWeightList = getWeightList;
+        this.messageHandlers.add(setWeight);
+        this.messageHandlers.add(getButtons);
+        this.messageHandlers.add(getChartByButton);
+        this.messageHandlers.add(getChartByCommand);
+        this.messageHandlers.add(getWeightList);
         this.redactWeight = redactWeight;
         this.botToken = botToken;
     }
@@ -134,21 +124,6 @@ public class Bot extends TelegramLongPollingBot {
                 return;
             }
         }
-//        if (getChartByButton.process(this, update)) {
-//            return;
-//        }
-//        if (getWeightList.process(this, update)) {
-//            return;
-//        }
-//        if (getChartByCommand.process(this, update)) {
-//            return;
-//        }
-//        if (getButtons.process(this, update)) {
-//            return;
-//        }
-//        if (setWeight.process(this, update)) {
-//            return;
-//        }
     }
 
     @Override

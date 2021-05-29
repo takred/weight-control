@@ -9,9 +9,13 @@ import takred.weightcontrol.MessageHandler;
 public class GetWeightList implements MessageHandler {
 
     public boolean process(Bot bot, Update update) {
-        if (update.getMessage().getText().equals("/gw")) {
-            bot.sendMessage(update.getMessage(), bot.weightService.getMyWeight(update.getMessage().getFrom().getId().toString()).toString());
-            return true;
+        if (!update.hasCallbackQuery()) {
+            if (update.hasMessage()) {
+                if (update.getMessage().getText().equals("/gw")) {
+                    bot.sendMessage(update.getMessage(), bot.weightService.getMyWeight(update.getMessage().getFrom().getId().toString()).toString());
+                    return true;
+                }
+            }
         }
         return false;
     }

@@ -128,7 +128,7 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "test_weight_controlBot";
+        return "weight_controlBot";
     }
 
     @Override

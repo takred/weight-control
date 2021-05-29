@@ -44,11 +44,11 @@ public class Bot extends TelegramLongPollingBot {
                RedactWeight redactWeight,
                @Value("${bot-token}") String botToken
     ) {
-        this.messageHandlers.add(setWeight);
-        this.messageHandlers.add(getButtons);
         this.messageHandlers.add(getChartByButton);
-        this.messageHandlers.add(getChartByCommand);
         this.messageHandlers.add(getWeightList);
+        this.messageHandlers.add(getChartByCommand);
+        this.messageHandlers.add(getButtons);
+        this.messageHandlers.add(setWeight);
         this.weightService = weightService;
         this.addWeight = addWeight;
 //        this.setWeight = setWeight;

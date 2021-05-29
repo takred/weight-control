@@ -11,7 +11,8 @@ public class GetButtons implements MessageHandler {
     public boolean process(Bot bot, Update update) {
         if (!update.hasCallbackQuery()) {
             if (update.hasMessage()) {
-                if (update.getMessage().getText().equals("b")) {
+                if (update.getMessage().getText().equals("b")
+                || update.getMessage().getText().equals("B")) {
                     bot.sendInlineKeyboardButton(update.getMessage());
                     return true;
                 }

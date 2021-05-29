@@ -17,7 +17,7 @@ public class SetWeight implements MessageHandler {
         if (!update.hasCallbackQuery()) {
             if (update.hasMessage()) {
                 try {
-                    Double.parseDouble(update.getMessage().getText());
+                    Double.parseDouble(update.getMessage().getText().replace(" ", "."));
                 } catch (NumberFormatException e) {
                     System.out.println("Couldn't turn string into number");
                     return false;

@@ -9,7 +9,7 @@ import takred.weightcontrol.dto.WeightDto;
 public class RedactWeight {
 
     public void redactWeight(Bot bot, Message message, WeightDto obj) {
-        bot.weightService.setWeight(obj, Double.parseDouble(message.getText()));
+        bot.weightService.setWeight(obj, Double.parseDouble(message.getText().replace(" ", ".")));
         bot.sendMessage(message, "Показатель веса отредактирован.");
     }
 }

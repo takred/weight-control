@@ -13,7 +13,7 @@ public class AddWeight{
 
     public boolean addWeight(Bot bot, Message message, List<WeightDto> weights) {
         if (weights.isEmpty()) {
-            bot.weightService.addWeight(new UserNameAndWeightDto(message.getFrom().getId().toString(), Double.parseDouble(message.getText())));
+            bot.weightService.addWeight(new UserNameAndWeightDto(message.getFrom().getId().toString(), Double.parseDouble(message.getText().replace(" ", "."))));
             bot.sendMessage(message, "Показатель веса добавлен в список.");
             return true;
         }
@@ -22,7 +22,7 @@ public class AddWeight{
 
     public boolean addWeight(Bot bot, Message message, boolean condition) {
         if (!condition) {
-            bot.weightService.addWeight(new UserNameAndWeightDto(message.getFrom().getId().toString(), Double.parseDouble(message.getText())));
+            bot.weightService.addWeight(new UserNameAndWeightDto(message.getFrom().getId().toString(), Double.parseDouble(message.getText().replace(" ", "."))));
             bot.sendMessage(message, "Показатель веса добавлен в список.");
             return true;
         }

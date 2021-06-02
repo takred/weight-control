@@ -5,7 +5,13 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-    <include file="add-weight-table.xml" relativeToChangelogFile="true"/>
-    <include file="user_accounts-table.xml" relativeToChangelogFile="true"/>
+    <changeSet id="user-accounts-table" author="takred">
+        <createTable tableName="weight">
+            <column name="telegram_user_id" type="integer">
+            <constraints primaryKey="true"/>
+        </column>
+            <column name="notification" type="boolean"/>
+        </createTable>
+    </changeSet>
 
 </databaseChangeLog>

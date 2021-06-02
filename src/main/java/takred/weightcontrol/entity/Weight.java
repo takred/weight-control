@@ -35,9 +35,7 @@ public class Weight {
     @Override
     public boolean equals(Object obj) {
         Weight weight = (Weight) obj;
-        if (this.userName.equals(weight.userName)
-                && this.weight.equals(weight.weight)
-                && this.id.equals(weight.id)) {
+        if (this.id.equals(weight.id)) {
             return true;
         }
         return false;

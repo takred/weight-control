@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface UserAccountRepository extends JpaRepository<UserAccount, Integer> {
 
-    List<UserAccount> findByNotification(boolean notification);
+    List<UserAccount> findBySendNotifications(boolean sendNotifications);
 }

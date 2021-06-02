@@ -16,8 +16,8 @@ public class UserAccountService {
         this.userAccountRepository = userAccountRepository;
     }
 
-    public List<Integer> getTrueNotificationUsers() {
-        List<UserAccount> userAccounts = userAccountRepository.findByNotification(true);
+    public List<Integer> getTrueSendNotificationsUsers() {
+        List<UserAccount> userAccounts = userAccountRepository.findBySendNotifications(true);
         List<Integer> telegramUsersId = new ArrayList<>();
 
         for (int i = 0; i < userAccounts.size(); i++) {

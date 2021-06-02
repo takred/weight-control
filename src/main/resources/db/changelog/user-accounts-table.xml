@@ -6,11 +6,11 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <changeSet id="user-accounts-table" author="takred">
-        <createTable tableName="user_account">
+        <createTable tableName="user_accounts">
             <column name="telegram_user_id" type="integer">
-            <constraints primaryKey="true"/>
-        </column>
-            <column name="notification" type="boolean"/>
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="send_notifications" type="boolean"/>
         </createTable>
     </changeSet>
 

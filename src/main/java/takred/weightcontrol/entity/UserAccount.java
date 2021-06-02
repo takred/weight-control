@@ -10,17 +10,17 @@ import javax.persistence.Id;
 public class UserAccount {
     @Id
     private Integer telegramUserId;
-    private boolean notification;
+    private boolean sendNotifications;
 
     public UserAccount() {}
 
     public UserAccount(Integer telegramUserId) {
         this.telegramUserId = telegramUserId;
-        this.notification = false;
+        this.sendNotifications = false;
     }
 
-    public UserAccount(Integer telegramUserId, boolean notification) {
+    public UserAccount(Integer telegramUserId, boolean sendNotifications) {
         this.telegramUserId = telegramUserId;
-        this.notification = notification;
+        this.sendNotifications = sendNotifications;
     }
 }

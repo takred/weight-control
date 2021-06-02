@@ -31,4 +31,20 @@ public class Weight {
         this.measurementDate = measurementDate;
         this.id = id;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Weight weight = (Weight) obj;
+        if (this.userName.equals(weight.userName)
+                && this.weight.equals(weight.weight)
+                && this.id.equals(weight.id)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return userName.hashCode() + weight.hashCode() - measurementDate.hashCode() - id.hashCode();
+    }
 }

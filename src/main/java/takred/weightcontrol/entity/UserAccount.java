@@ -23,4 +23,18 @@ public class UserAccount {
         this.telegramUserId = telegramUserId;
         this.sendNotifications = sendNotifications;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        UserAccount userAccount = (UserAccount) obj;
+        if (telegramUserId.equals(userAccount.telegramUserId)){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return telegramUserId.hashCode();
+    }
 }

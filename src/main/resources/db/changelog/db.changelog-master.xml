@@ -6,6 +6,6 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <include file="add-weight-table.xml" relativeToChangelogFile="true"/>
-    <include file="user_accounts-table.xml" relativeToChangelogFile="true"/>
+    <include file="user-accounts-table.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

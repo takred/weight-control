@@ -45,6 +45,6 @@ public class Weight {
 
     @Override
     public int hashCode() {
-        return userName.hashCode() + weight.hashCode() - measurementDate.hashCode() - id.hashCode();
+        return id.hashCode();
     }
 }

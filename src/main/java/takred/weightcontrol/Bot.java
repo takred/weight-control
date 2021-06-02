@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import takred.weightcontrol.bot_commands.*;
+import takred.weightcontrol.service.UserAccountService;
 import takred.weightcontrol.service.WeightService;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +26,7 @@ import java.util.List;
 @Service
 public class Bot extends TelegramLongPollingBot {
     public final WeightService weightService;
+    public final UserAccountService userAccountService;
     public final AddWeight addWeight;
     public final RedactWeight redactWeight;
     private final String botToken;
@@ -32,6 +34,7 @@ public class Bot extends TelegramLongPollingBot {
     private final List<MessageHandler> messageHandlers = new ArrayList<>();
 
     public Bot(WeightService weightService,
+               UserAccountService userAccountService,
                AddWeight addWeight,
                SetWeight setWeight, GetButtons getButtons,
                GetChartByButton getChartByButton,
@@ -42,6 +45,7 @@ public class Bot extends TelegramLongPollingBot {
                @Value("${bot-token}") String botToken,
                @Value("&{bot-user-name}") String botUserName) {
         this.weightService = weightService;
+        this.userAccountService = userAccountService;
         this.addWeight = addWeight;
         this.messageHandlers.add(setWeight);
         this.messageHandlers.add(getButtons);

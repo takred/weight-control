@@ -27,6 +27,7 @@ import java.util.List;
 public class Bot extends TelegramLongPollingBot {
     public final WeightService weightService;
     public final UserAccountService userAccountService;
+    private final Recorder recorder;
     public final AddWeight addWeight;
     public final RedactWeight redactWeight;
     private final String botToken;
@@ -35,6 +36,7 @@ public class Bot extends TelegramLongPollingBot {
 
     public Bot(WeightService weightService,
                UserAccountService userAccountService,
+               Recorder recorder,
                AddWeight addWeight,
                SetWeight setWeight, GetButtons getButtons,
                GetChartByButton getChartByButton,
@@ -46,6 +48,7 @@ public class Bot extends TelegramLongPollingBot {
                @Value("&{bot-user-name}") String botUserName) {
         this.weightService = weightService;
         this.userAccountService = userAccountService;
+        this.recorder = recorder;
         this.addWeight = addWeight;
         this.messageHandlers.add(setWeight);
         this.messageHandlers.add(getButtons);
@@ -148,6 +151,8 @@ public class Bot extends TelegramLongPollingBot {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
+        recorder.addForNotExists(this, update);
+
         for (int i = 0; i <messageHandlers.size(); i++) {
             if (messageHandlers.get(i).process(this, update)) {
                 return;

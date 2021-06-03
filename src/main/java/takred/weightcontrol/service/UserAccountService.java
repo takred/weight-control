@@ -25,4 +25,12 @@ public class UserAccountService {
         }
         return telegramUsersId;
     }
+
+    public void addUserAccount(Integer telegramUserId) {
+        userAccountRepository.save(new UserAccount(telegramUserId));
+    }
+
+    public boolean userAccountExist(Integer telegramUserId) {
+        return userAccountRepository.existsById(telegramUserId);
+    }
 }

@@ -5,18 +5,25 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import takred.weightcontrol.Bot;
 import takred.weightcontrol.MessageHandler;
 import takred.weightcontrol.dto.WeightDto;
+import takred.weightcontrol.service.WeightService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class GetTableByButton implements MessageHandler {
+    private final WeightService weightService;
+
+    public GetTableByButton(WeightService weightService) {
+        this.weightService = weightService;
+    }
+
     @Override
     public boolean process(Bot bot, Update update){
         if (update.getMessage() == null) {
             if (update.hasCallbackQuery()) {
                 if (update.getCallbackQuery().getData().equals("/gwt")) {
-                    List<WeightDto> lastTenWeights = getLastTenWeights(bot.weightService.getMyWeight(update.getCallbackQuery().getFrom().getId().toString()));
+                    List<WeightDto> lastTenWeights = getLastTenWeights(weightService.getMyWeight(update.getCallbackQuery().getFrom().getId().toString()));
                     List<String> table = getTable(lastTenWeights);
                     bot.sendMessage(update.getCallbackQuery(), table);
                 }

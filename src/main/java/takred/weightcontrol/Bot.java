@@ -25,38 +25,27 @@ import java.util.List;
 
 @Service
 public class Bot extends TelegramLongPollingBot {
-    public final WeightService weightService;
-    public final UserAccountService userAccountService;
     private final Recorder recorder;
-    public final AddWeight addWeight;
-    public final RedactWeight redactWeight;
     private final String botToken;
     private final String botUserName;
     private final List<MessageHandler> messageHandlers = new ArrayList<>();
 
-    public Bot(WeightService weightService,
-               UserAccountService userAccountService,
-               Recorder recorder,
-               AddWeight addWeight,
-               SetWeight setWeight, GetButtons getButtons,
+    public Bot(Recorder recorder,
+               SetWeight setWeight,
+               GetButtons getButtons,
                GetChartByButton getChartByButton,
                GetChartByCommand getChartByCommand,
                GetWeightList getWeightList,
                GetTableByButton getTableByButton,
-               RedactWeight redactWeight,
                @Value("${bot-token}") String botToken,
                @Value("&{bot-user-name}") String botUserName) {
-        this.weightService = weightService;
-        this.userAccountService = userAccountService;
         this.recorder = recorder;
-        this.addWeight = addWeight;
-        this.messageHandlers.add(setWeight);
+       this.messageHandlers.add(setWeight);
         this.messageHandlers.add(getButtons);
         this.messageHandlers.add(getChartByButton);
         this.messageHandlers.add(getChartByCommand);
         this.messageHandlers.add(getWeightList);
         this.messageHandlers.add(getTableByButton);
-        this.redactWeight = redactWeight;
         this.botToken = botToken;
         this.botUserName = botUserName;
     }

@@ -20,7 +20,7 @@ public class GetTableByButton implements MessageHandler {
 
     @Override
     public boolean process(Bot bot, Update update){
-        if (update.getMessage() == null) {
+        if (!update.hasMessage()) {
             if (update.hasCallbackQuery()) {
                 if (update.getCallbackQuery().getData().equals("/gwt")) {
                     List<WeightDto> lastTenWeights = getLastTenWeights(weightService.getMyWeight(update.getCallbackQuery().getFrom().getId().toString()));

@@ -25,7 +25,7 @@ public class GetChartByButton implements MessageHandler {
     }
 
     public boolean process(Bot bot, Update update) throws IOException {
-        if (update.getMessage() == null) {
+        if (!update.hasMessage()) {
             if (update.hasCallbackQuery()) {
                 if (update.getCallbackQuery().getData().equals("/gwc")) {
                     ChartCreator chartCreator = new ChartCreator();

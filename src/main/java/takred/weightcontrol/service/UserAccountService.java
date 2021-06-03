@@ -1,6 +1,8 @@
 package takred.weightcontrol.service;
 
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import takred.weightcontrol.dto.UserAccountDto;
 import takred.weightcontrol.entity.UserAccount;
 import takred.weightcontrol.repository.UserAccountRepository;
 
@@ -30,7 +32,24 @@ public class UserAccountService {
         userAccountRepository.save(new UserAccount(telegramUserId));
     }
 
+    public void setNotifications(Update update) {
+        UserAccount userAccount;
+        if (update.hasMessage()) {
+            userAccount = userAccountRepository.findById(update.getMessage().getFrom().getId()).get();
+        } else if (update.hasCallbackQuery()) {
+            userAccount = userAccountRepository.findById(update.getCallbackQuery().getFrom().getId()).get();
+        } else {
+            return;
+        }
+        System.out.println(userAccount.getTelegramUserId() + " " + !userAccount.isSendNotifications());
+        userAccountRepository.save(new UserAccount(userAccount.getTelegramUserId(), !userAccount.isSendNotifications()));
+    }
+
     public boolean userAccountExist(Integer telegramUserId) {
         return userAccountRepository.existsById(telegramUserId);
+    }
+
+    public UserAccount getUserAccount(Integer telegramUserId) {
+        return userAccountRepository.findById(telegramUserId).get();
     }
 }

@@ -29,6 +29,7 @@ public class Bot extends TelegramLongPollingBot {
     private final String botToken;
     private final String botUserName;
     private final List<MessageHandler> messageHandlers = new ArrayList<>();
+    private final List<NotificationHandler> notificationHandlers = new ArrayList<>();
 
     public Bot(Recorder recorder,
                SetWeight setWeight,
@@ -37,15 +38,17 @@ public class Bot extends TelegramLongPollingBot {
                GetChartByCommand getChartByCommand,
                GetWeightList getWeightList,
                GetTableByButton getTableByButton,
+               NotificationsByCommand notificationsByCommand,
                @Value("${bot-token}") String botToken,
                @Value("&{bot-user-name}") String botUserName) {
         this.recorder = recorder;
-       this.messageHandlers.add(setWeight);
+        this.messageHandlers.add(setWeight);
         this.messageHandlers.add(getButtons);
         this.messageHandlers.add(getChartByButton);
         this.messageHandlers.add(getChartByCommand);
         this.messageHandlers.add(getWeightList);
         this.messageHandlers.add(getTableByButton);
+        this.notificationHandlers.add(notificationsByCommand);
         this.botToken = botToken;
         this.botUserName = botUserName;
     }
@@ -141,9 +144,13 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         recorder.addForNotExists(this, update);
-
         for (int i = 0; i <messageHandlers.size(); i++) {
             if (messageHandlers.get(i).process(this, update)) {
+                return;
+            }
+        }
+        for (int i = 0; i < notificationHandlers.size(); i++) {
+            if (notificationHandlers.get(i).process(this, update)) {
                 return;
             }
         }

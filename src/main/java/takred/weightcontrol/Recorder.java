@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Service
 public class Recorder {
 
-    public void AddForNotExists(Bot bot, Update update) {
+    public void addForNotExists(Bot bot, Update update) {
         if (update.hasMessage()) {
             Integer telegramUserId = update.getMessage().getFrom().getId();
             if (!bot.userAccountService.userAccountExist(telegramUserId)) {

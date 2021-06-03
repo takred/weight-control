@@ -151,7 +151,7 @@ public class Bot extends TelegramLongPollingBot {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
-        recorder.AddForNotExists(this, update);
+        recorder.addForNotExists(this, update);
 
         for (int i = 0; i <messageHandlers.size(); i++) {
             if (messageHandlers.get(i).process(this, update)) {

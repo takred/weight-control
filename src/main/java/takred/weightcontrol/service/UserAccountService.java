@@ -52,4 +52,18 @@ public class UserAccountService {
     public UserAccount getUserAccount(Integer telegramUserId) {
         return userAccountRepository.findById(telegramUserId).get();
     }
+
+    public String getNotificationsStatus(Integer telegramUserId) {
+        if (userAccountRepository.findById(telegramUserId).get().isSendNotifications()) {
+            return "Уведомления включены.";
+        }
+        return "Уведомления отключены.";
+    }
+
+    public String getNotificationsNameButton(Integer telegramUserId) {
+        if (userAccountRepository.findById(telegramUserId).get().isSendNotifications()) {
+            return "Выключить уведомления";
+        }
+        return "Включить уведомления";
+    }
 }

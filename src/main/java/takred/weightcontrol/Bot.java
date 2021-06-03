@@ -16,7 +16,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import takred.weightcontrol.bot_commands.*;
 import takred.weightcontrol.service.UserAccountService;
-import takred.weightcontrol.service.WeightService;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -25,6 +24,7 @@ import java.util.List;
 
 @Service
 public class Bot extends TelegramLongPollingBot {
+    private final UserAccountService userAccountService;
     private final Recorder recorder;
     private final String botToken;
     private final String botUserName;
@@ -32,6 +32,7 @@ public class Bot extends TelegramLongPollingBot {
     private final List<NotificationHandler> notificationHandlers = new ArrayList<>();
 
     public Bot(Recorder recorder,
+               UserAccountService userAccountService,
                SetWeight setWeight,
                GetButtons getButtons,
                GetChartByButton getChartByButton,
@@ -39,8 +40,10 @@ public class Bot extends TelegramLongPollingBot {
                GetWeightList getWeightList,
                GetTableByButton getTableByButton,
                NotificationsByCommand notificationsByCommand,
+               NotificationsByButton notificationsByButton,
                @Value("${bot-token}") String botToken,
                @Value("&{bot-user-name}") String botUserName) {
+        this.userAccountService = userAccountService;
         this.recorder = recorder;
         this.messageHandlers.add(setWeight);
         this.messageHandlers.add(getButtons);
@@ -49,6 +52,7 @@ public class Bot extends TelegramLongPollingBot {
         this.messageHandlers.add(getWeightList);
         this.messageHandlers.add(getTableByButton);
         this.notificationHandlers.add(notificationsByCommand);
+        this.notificationHandlers.add(notificationsByButton);
         this.botToken = botToken;
         this.botUserName = botUserName;
     }
@@ -122,13 +126,23 @@ public class Bot extends TelegramLongPollingBot {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
         InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
-        inlineKeyboardButton1.setText("График веса.");
+        InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
+
+        inlineKeyboardButton1.setText("График веса");
         inlineKeyboardButton1.setCallbackData("/gwc");
-        inlineKeyboardButton2.setText("Таблица веса.");
+
+        inlineKeyboardButton2.setText("Таблица веса");
         inlineKeyboardButton2.setCallbackData("/gwt");
+
+        Integer telegramUserId = message.getFrom().getId();
+        inlineKeyboardButton3.setText(userAccountService.getNotificationsNameButton(telegramUserId));
+        inlineKeyboardButton3.setCallbackData("/n");
+
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
         keyboardButtonsRow1.add(inlineKeyboardButton1);
         keyboardButtonsRow1.add(inlineKeyboardButton2);
+        keyboardButtonsRow1.add(inlineKeyboardButton3);
+
         List<List<InlineKeyboardButton>> list = new ArrayList<>();
         list.add(keyboardButtonsRow1);
         inlineKeyboardMarkup.setKeyboard(list);

@@ -10,6 +10,7 @@ public class UserAccountMapper {
     public UserAccountDto map(UserAccount entity) {
         return new UserAccountDtoBuilder()
                 .withTelegramUserId(entity.getTelegramUserId())
+                .withChatId(entity.getChatId())
                 .withSendNotifications(entity.isSendNotifications())
                 .build();
     }

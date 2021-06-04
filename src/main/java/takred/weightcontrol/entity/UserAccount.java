@@ -12,18 +12,15 @@ import javax.persistence.Table;
 public class UserAccount {
     @Id
     private Integer telegramUserId;
+    private Long chatId;
     private boolean sendNotifications;
 
     public UserAccount() {}
 
-    public UserAccount(Integer telegramUserId) {
+    public UserAccount(Integer telegramUserId, Long chatId) {
         this.telegramUserId = telegramUserId;
+        this.chatId = chatId;
         this.sendNotifications = false;
-    }
-
-    public UserAccount(Integer telegramUserId, boolean sendNotifications) {
-        this.telegramUserId = telegramUserId;
-        this.sendNotifications = sendNotifications;
     }
 
     @Override

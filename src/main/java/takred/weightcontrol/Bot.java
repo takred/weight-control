@@ -81,6 +81,18 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
+    public void sendMessage(Long chatId, String result) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(chatId);
+        sendMessage.setText(result);
+        try {
+            sendApiMethod(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void sendMessage(CallbackQuery callbackQuery, List<String> table) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
@@ -157,7 +169,7 @@ public class Bot extends TelegramLongPollingBot {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
-        recorder.addForNotExists(this, update);
+        recorder.addForNotExists(update);
         for (int i = 0; i <messageHandlers.size(); i++) {
             if (messageHandlers.get(i).process(this, update)) {
                 return;

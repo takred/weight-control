@@ -1,9 +1,11 @@
 package takred.weightcontrol.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import takred.weightcontrol.dto.UserAccountDto;
 import takred.weightcontrol.entity.UserAccount;
+import takred.weightcontrol.mapper.UserAccountMapper;
 import takred.weightcontrol.repository.UserAccountRepository;
 
 import java.util.ArrayList;
@@ -11,27 +13,29 @@ import java.util.List;
 
 @Service
 public class UserAccountService {
-
     private final UserAccountRepository userAccountRepository;
+    private final UserAccountMapper userAccountMapper;
 
-    public UserAccountService(UserAccountRepository userAccountRepository) {
+    public UserAccountService(UserAccountRepository userAccountRepository, UserAccountMapper userAccountMapper) {
         this.userAccountRepository = userAccountRepository;
+        this.userAccountMapper = userAccountMapper;
     }
 
-    public List<Integer> getTrueSendNotificationsUsers() {
+    public List<UserAccountDto> getTrueSendNotificationsUsers() {
         List<UserAccount> userAccounts = userAccountRepository.findBySendNotifications(true);
-        List<Integer> telegramUsersId = new ArrayList<>();
+        List<UserAccountDto> telegramUsersId = new ArrayList<>();
 
         for (int i = 0; i < userAccounts.size(); i++) {
-            telegramUsersId.add(userAccounts.get(i).getTelegramUserId());
+            telegramUsersId.add(userAccountMapper.map(userAccounts.get(i)));
         }
         return telegramUsersId;
     }
 
-    public void addUserAccount(Integer telegramUserId) {
-        userAccountRepository.save(new UserAccount(telegramUserId));
+    public void addUserAccount(Integer telegramUserId, Long chatId) {
+        userAccountRepository.save(new UserAccount(telegramUserId, chatId));
     }
 
+    @Transactional
     public void setNotifications(Update update) {
         UserAccount userAccount;
         if (update.hasMessage()) {
@@ -41,8 +45,7 @@ public class UserAccountService {
         } else {
             return;
         }
-        System.out.println(userAccount.getTelegramUserId() + " " + !userAccount.isSendNotifications());
-        userAccountRepository.save(new UserAccount(userAccount.getTelegramUserId(), !userAccount.isSendNotifications()));
+        userAccount.setSendNotifications(!userAccount.isSendNotifications());
     }
 
     public boolean userAccountExist(Integer telegramUserId) {

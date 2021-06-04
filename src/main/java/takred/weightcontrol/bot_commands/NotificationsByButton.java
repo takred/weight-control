@@ -20,7 +20,6 @@ public class NotificationsByButton implements NotificationHandler {
             if (update.hasCallbackQuery()) {
                 if (update.getCallbackQuery().getData().equals("/n")) {
                     userAccountService.setNotifications(update);
-                    System.out.println("Id = " + update.getCallbackQuery().getFrom().getId());
                     String result = userAccountService.getNotificationsStatus(update.getCallbackQuery().getFrom().getId());
                     bot.sendMessage(update.getCallbackQuery().getMessage(), result);
                     return true;

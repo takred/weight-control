@@ -28,31 +28,19 @@ public class Bot extends TelegramLongPollingBot {
     private final Recorder recorder;
     private final String botToken;
     private final String botUserName;
-    private final List<MessageHandler> messageHandlers = new ArrayList<>();
-    private final List<NotificationHandler> notificationHandlers = new ArrayList<>();
+    private final List<MessageHandler> messageHandlers;
+    private final List<NotificationHandler> notificationHandlers;
 
     public Bot(Recorder recorder,
                UserAccountService userAccountService,
-               SetWeight setWeight,
-               GetButtons getButtons,
-               GetChartByButton getChartByButton,
-               GetChartByCommand getChartByCommand,
-               GetWeightList getWeightList,
-               GetTableByButton getTableByButton,
-               NotificationsByCommand notificationsByCommand,
-               NotificationsByButton notificationsByButton,
                @Value("${bot-token}") String botToken,
-               @Value("&{bot-user-name}") String botUserName) {
+               @Value("&{bot-user-name}") String botUserName,
+               List<MessageHandler> messageHandlers,
+               List<NotificationHandler> notificationHandlers) {
         this.userAccountService = userAccountService;
         this.recorder = recorder;
-        this.messageHandlers.add(setWeight);
-        this.messageHandlers.add(getButtons);
-        this.messageHandlers.add(getChartByButton);
-        this.messageHandlers.add(getChartByCommand);
-        this.messageHandlers.add(getWeightList);
-        this.messageHandlers.add(getTableByButton);
-        this.notificationHandlers.add(notificationsByCommand);
-        this.notificationHandlers.add(notificationsByButton);
+        this.messageHandlers = new ArrayList<>(messageHandlers);
+        this.notificationHandlers = new ArrayList<>(notificationHandlers);
         this.botToken = botToken;
         this.botUserName = botUserName;
     }

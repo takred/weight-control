@@ -31,7 +31,7 @@ public class Sendler {
         LocalDateTime dateTime = LocalDateTime.now();
         Integer yearNow = dateTime.getYear();
         Integer dayNow = dateTime.getDayOfYear();
-        LocalDateTime dayInYear = LocalDateTime.of(dateTime.getYear(), 12, 31, 0, 0);
+        LocalDateTime lastDayOfTheYear = LocalDateTime.of(dateTime.getYear(), 12, 31, 0, 0);
         for (int i = 0; i < userAccounts.size(); i++) {
             UserAccountDto userAccountDto = userAccounts.get(i);
             YearAndDayDto lastRecordingDay = weightService.getLastRecordingDayById(userAccountDto.getTelegramUserId());
@@ -39,7 +39,7 @@ public class Sendler {
                 break;
             }
             if (yearNow - lastRecordingDay.getYear() > 0
-                    && dayNow + dayInYear.getDayOfYear() - lastRecordingDay.getDay() >= 2
+                    && dayNow + lastDayOfTheYear.getDayOfYear() - lastRecordingDay.getDay() >= 2
             || yearNow - lastRecordingDay.getYear() == 0
                     && dayNow - lastRecordingDay.getDay() >= 2) {
                 sendNotification(userAccountDto);

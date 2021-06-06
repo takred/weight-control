@@ -11,7 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import takred.weightcontrol.bot_commands.*;
@@ -62,6 +64,7 @@ public class Bot extends TelegramLongPollingBot {
         sendMessage.setChatId(message.getChatId().toString());
         sendMessage.setReplyToMessageId(message.getMessageId());
         sendMessage.setText(result);
+        sendMessage.setReplyMarkup(getReplyKeyboardButton(message.getFrom().getId()));
         try {
             sendApiMethod(sendMessage);
         } catch (TelegramApiException e) {
@@ -91,6 +94,25 @@ public class Bot extends TelegramLongPollingBot {
             line = line + table.get(i) + "\n";
         }
         sendMessage.setText(line);
+        sendMessage.setReplyMarkup(getReplyKeyboardButton(callbackQuery.getFrom().getId()));
+        try {
+            sendApiMethod(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendMessage(Message message, List<String> table) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(message.getChatId().toString());
+        sendMessage.setReplyToMessageId(message.getMessageId());
+        String line = "";
+        for (int i = 0; i < table.size(); i++) {
+            line = line + table.get(i) + "\n";
+        }
+        sendMessage.setText(line);
+        sendMessage.setReplyMarkup(getReplyKeyboardButton(message.getFrom().getId()));
         try {
             sendApiMethod(sendMessage);
         } catch (TelegramApiException e) {
@@ -103,6 +125,7 @@ public class Bot extends TelegramLongPollingBot {
         sendPhoto.setPhoto(photo);
         sendPhoto.setChatId(message.getChatId().toString());
         sendPhoto.setReplyToMessageId(message.getMessageId());
+        sendPhoto.setReplyMarkup(getReplyKeyboardButton(message.getFrom().getId()));
         try {
             execute(sendPhoto);
         } catch (TelegramApiException e) {
@@ -115,6 +138,7 @@ public class Bot extends TelegramLongPollingBot {
         sendPhoto.setPhoto(photo);
         sendPhoto.setChatId(callbackQuery.getMessage().getChatId());
         sendPhoto.setReplyToMessageId(callbackQuery.getMessage().getMessageId());
+        sendPhoto.setReplyMarkup(getReplyKeyboardButton(callbackQuery.getFrom().getId()));
         try {
             execute(sendPhoto);
         } catch (TelegramApiException e) {
@@ -152,6 +176,29 @@ public class Bot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+    }
+
+    public ReplyKeyboardMarkup getReplyKeyboardButton(Integer telegramUserId) {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(true);
+
+        KeyboardRow keyboardRow1 = new KeyboardRow();
+        KeyboardRow keyboardRow2 = new KeyboardRow();
+        KeyboardRow keyboardRow3 = new KeyboardRow();
+
+        keyboardRow1.add("График веса");
+        keyboardRow2.add("Таблица веса");
+        keyboardRow3.add(userAccountService.getNotificationsNameButton(telegramUserId));
+
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+        keyboardRows.add(keyboardRow1);
+        keyboardRows.add(keyboardRow2);
+        keyboardRows.add(keyboardRow3);
+
+        replyKeyboardMarkup.setKeyboard(keyboardRows);
+        return replyKeyboardMarkup;
     }
 
     @SneakyThrows

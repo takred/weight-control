@@ -27,9 +27,10 @@ public class GetChartByCommand implements MessageHandler {
     public boolean process(Bot bot, Update update) throws IOException {
         if (!update.hasCallbackQuery()) {
             if (update.hasMessage()) {
-                if (update.getMessage().getText().equals("/gwc")) {
+                if (update.getMessage().getText().equals("/gwc")
+                || update.getMessage().getText().equals("График веса")) {
                     ChartCreator chartCreator = new ChartCreator();
-                    List<WeightDto> dtos = weightService.getMyWeight(update.getCallbackQuery().getFrom().getId().toString());
+                    List<WeightDto> dtos = weightService.getMyWeight(update.getMessage().getFrom().getId().toString());
                     CategoryDataset categoryDataset = chartCreator.createDataset(dtos);
                     JFreeChart chart = chartCreator.createChart(categoryDataset, getLowConfines(dtos), getHighConfines(dtos));
                     BufferedImage bufferedImage = chart.createBufferedImage(1000, 1000);

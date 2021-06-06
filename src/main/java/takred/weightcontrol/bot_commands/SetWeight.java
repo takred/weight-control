@@ -24,7 +24,6 @@ public class SetWeight implements MessageHandler {
     }
 
     public boolean process(Bot bot, Update update) {
-
         if (!update.hasCallbackQuery()) {
             if (update.hasMessage()) {
                 try {

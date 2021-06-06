@@ -19,7 +19,9 @@ public class NotificationsByCommand implements NotificationHandler {
     public boolean process(Bot bot, Update update) {
         if (!update.hasCallbackQuery()) {
             if (update.hasMessage()) {
-                if (update.getMessage().getText().equals("/n")) {
+                if (update.getMessage().getText().equals("/n")
+                || update.getMessage().getText().equals("Выключить уведомления")
+                || update.getMessage().getText().equals("Включить уведомления")) {
                     userAccountService.setNotifications(update);
                     String result = userAccountService.getNotificationsStatus(update.getMessage().getFrom().getId());
                     bot.sendMessage(update.getMessage(), result);

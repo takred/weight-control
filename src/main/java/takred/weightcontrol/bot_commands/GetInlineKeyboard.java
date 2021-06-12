@@ -6,7 +6,7 @@ import takred.weightcontrol.Bot;
 import takred.weightcontrol.MessageHandler;
 
 @Service
-public class GetButtons implements MessageHandler {
+public class GetInlineKeyboard implements MessageHandler {
 
     public boolean process(Bot bot, Update update) {
         if (!update.hasCallbackQuery()) {

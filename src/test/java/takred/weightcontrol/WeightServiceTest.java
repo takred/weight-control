@@ -15,12 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class WeightServiceTest {
 
     @Test
-    void simple() {
-        int sum = 2 + 2;
-        assertEquals(4, sum);
-    }
-
-    @Test
     void lessThanTen() {
         WeightService weightService = new WeightService(null, null, null);
 

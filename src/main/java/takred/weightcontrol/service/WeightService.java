@@ -56,6 +56,17 @@ public class WeightService {
         return new YearAndDayDto(year, day);
     }
 
+    public List<WeightDto> getLastTenWeights(List<WeightDto> dtos) {
+        if (dtos.size() <= 10) {
+            return dtos;
+        }
+        List<WeightDto> lastTenWeights = new ArrayList<>();
+        for (int i = 1; i < 11; i++) {
+            lastTenWeights.add(dtos.get(dtos.size() - i));
+        }
+        return lastTenWeights;
+    }
+
     public List<String> getMyWeightCsv(String userName) {
         return converter.convert(getMyWeight(userName));
     }

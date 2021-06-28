@@ -12,7 +12,7 @@ import takred.weightcontrol.service.UserAccountService;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class addUserAccountTest {
+public class AddUserAccountTest {
     @Mock
     UserAccountRepository userAccountRepository;
     @InjectMocks

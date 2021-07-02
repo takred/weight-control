@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import takred.weightcontrol.Bot;
 import takred.weightcontrol.MessageHandler;
 import takred.weightcontrol.dto.WeightDto;
+import takred.weightcontrol.dto.YearAndDayDto;
 import takred.weightcontrol.service.WeightService;
 
 import java.time.LocalDateTime;
@@ -39,25 +40,31 @@ public class SetWeight implements MessageHandler {
                     System.out.println("Couldn't turn string into number");
                     return false;
                 }
+
                 List<WeightDto> weights = weightService.getMyWeight(update.getMessage().getFrom().getId().toString());
                 WeightDto obj = weights.get(weights.size() - 1);
                 Double newWeight = Double.parseDouble(update.getMessage().getText().replace(" ", "."));
+
+                YearAndDayDto lastRecordingDay = new YearAndDayDto(obj.getDate());
+                YearAndDayDto dateTimeNow = new YearAndDayDto(LocalDateTime.now());
+                int differenceOfDays = getDifferenceOfDays(lastRecordingDay, dateTimeNow);
                 boolean withinTheBorder = Math.abs(obj.getWeight() - newWeight) > 0
-                        && Math.abs(obj.getWeight() - newWeight) <= recordBoundary;
+                        && Math.abs(obj.getWeight() - newWeight) <= (recordBoundary * differenceOfDays) + recordBoundary;
                 if (!withinTheBorder) {
-                    bot.sendMessage(update.getMessage(), "Введённый вес больше предыдущего на 5кг. Такого не может быть!");
+                    bot.sendMessage(update.getMessage(), "Введённый вес больше предыдущего на " + ((recordBoundary * differenceOfDays)
+                            + recordBoundary) + "кг. Такого не может быть!");
                     return true;
                 }
 
                 LocalDateTime dateTime = LocalDateTime.now();
                 LocalTime midday = LocalTime.of(12, 00);
+                boolean now = dateTime.toLocalTime().getHour() >= midday.getHour();
+                boolean inRecording = obj.getDate().toLocalTime().getHour() >= midday.getHour();
 
                 if (addWeight.addWeight(bot, update.getMessage(), weights)) {
                     return true;
                 }
 
-                boolean now = dateTime.toLocalTime().getHour() >= midday.getHour();
-                boolean inRecording = obj.getDate().toLocalTime().getHour() >= midday.getHour();
                 boolean condition = dateTime.toLocalDate().equals(obj.getDate().toLocalDate())
                         && now == inRecording;
 
@@ -70,5 +77,20 @@ public class SetWeight implements MessageHandler {
             }
         }
         return false;
+    }
+
+    public int getDifferenceOfDays(YearAndDayDto lastRecordingDay, YearAndDayDto dateTimeNow) {
+        int differenceOfDays = 0;
+        if (!lastRecordingDay.getYear().equals(dateTimeNow.getYear())) {
+            LocalDateTime lastDayOfTheYear = LocalDateTime.of(0, 12, 31, 0, 0);
+            differenceOfDays = (dateTimeNow.getYear() - lastRecordingDay.getYear()) * lastDayOfTheYear.getDayOfYear() + dateTimeNow.getDay();
+
+            if (differenceOfDays > 20) {
+                differenceOfDays = 20;
+            }
+        } else {
+            differenceOfDays = dateTimeNow.getDay() - lastRecordingDay.getDay();
+        }
+        return differenceOfDays;
     }
 }

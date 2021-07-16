@@ -34,23 +34,23 @@ public class GetTrueSendNotificationsUsersTest {
         UserAccount userAccount = new UserAccount(1, 123L);
         userAccount.setSendNotifications(true);
         map(1, 123L, true);
-
         userAccountDtos.add(userAccountMapper.map(userAccount));
+
         userAccount = new UserAccount(2, 234L);
         userAccount.setSendNotifications(false);
         map(2, 234L, false);
-
         userAccountDtos.add(userAccountMapper.map(userAccount));
+
         userAccount = new UserAccount(3, 345L);
         userAccount.setSendNotifications(true);
         map(3, 345L, true);
-
         userAccountDtos.add(userAccountMapper.map(userAccount));
+
         userAccount = new UserAccount(4, 456L);
         userAccount.setSendNotifications(false);
         map(4, 456L, false);
-
         userAccountDtos.add(userAccountMapper.map(userAccount));
+
         List<UserAccountDto> userAccountDtosTrue = new ArrayList<>();
         for (int i = 0; i < userAccountDtos.size(); i++) {
             UserAccountDto e = userAccountDtos.get(i);
